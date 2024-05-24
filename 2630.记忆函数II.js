@@ -45,32 +45,36 @@
   inputs[i][j] != NaN
  */
 
-let callCount = 0
+let callCount = 0;
 const memoizedFn = memoize(function (a, b) {
-  callCount += 1
-  return a + b
-})
-memoizedFn(2, 3) // 5
-memoizedFn(2, 3) // 5
-memoizedFn(3, 2) // 5
-console.log(callCount) // 1
+  callCount += 1;
+  return a + b;
+});
+memoizedFn(2, 3); // 5
+memoizedFn(2, 3); // 5
+memoizedFn(3, 2); // 5
+console.log(callCount); // 1
 
 /**
  * @param {Function} fn
  * @return {Function}
+ * 解题思路
+ * 1.传递的参数map形式保存，一个参数对应一个id
+ * 2.所有参数对应id转String合并，得到一个key
+ * 3.执行回调函数，返回的值与参数得到key，存储map
  */
 function memoize(fn) {
   let mapValue = new Map(), // 记录fn执行的值
-    mapId = new Map() // 记录传递的参数
-  let uid = 0
+    mapId = new Map(); // 记录传递的参数
+  let uid = 0;
   return function (...args) {
     const key = args
       .map((value) => {
-        if (!mapId.has(value)) mapId.set(value, ++uid)
-        return mapId.get(value)
+        if (!mapId.has(value)) mapId.set(value, ++uid);
+        return mapId.get(value);
       })
-      .join('_')
-    if (!mapValue.has(key)) mapValue.set(key, fn.apply(null, args))
-    return mapValue.get(key)
-  }
+      .join("_");
+    if (!mapValue.has(key)) mapValue.set(key, fn.apply(null, args));
+    return mapValue.get(key);
+  };
 }
